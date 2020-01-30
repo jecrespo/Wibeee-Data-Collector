@@ -82,3 +82,29 @@ dbClient.write_points(datos)
 Records = dbClient.query('select * from data;')
 # Print the time series query results
 print("resultado:",Records)
+
+# --------------------------------------------------------------------------- # 
+# Guardo datos en Fiware llamado a iotagent ultralight
+# --------------------------------------------------------------------------- # 
+
+url = "http://127.0.0.1:7896/iot/d?k=4jggokgpepnvsb2uvd59oz&i=wibee1.casa"
+
+payload = "v1|"+monitores_energia['consumo casa']['data']['vrms1']+"|\
+v2|"+monitores_energia['consumo casa']['data']['vrms2']+"|\
+v3|"+monitores_energia['consumo casa']['data']['vrms3']+"|\
+i1|"+monitores_energia['consumo casa']['data']['irms1']+"|\
+i2|"+monitores_energia['consumo casa']['data']['irms2']+"|\
+i3|"+monitores_energia['consumo casa']['data']['irms3']+"|\
+p1|"+monitores_energia['consumo casa']['data']['pac1']+"|\
+p2|"+monitores_energia['consumo casa']['data']['pac2']+"|\
+p3|"+monitores_energia['consumo casa']['data']['pac3']+"|\
+potencia_activa_total|"+monitores_energia['consumo casa']['data']['pact']+"|\
+potencia_reactiva_total|"+monitores_energia['consumo casa']['data']['preact']+"|\
+factor_potencia|"+monitores_energia['consumo casa']['data']['fpott']+"\r"
+
+headers = {
+  'Content-Type': 'text/plain'
+}
+
+response = requests.request("POST", url, headers=headers, data = payload)
+print(response.text.encode('utf8'))
